@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: social-commerce-be
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  datasource:
+    username: {username}
+    password: {password}
+    url: {databaseUrl}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: {googleClientId}
+            client-secret: {googleClientSecret}
+            scope: profile, email
+security:
+  jwt:
+    secret-key: {jwtSecret}
+    expiration-time: {jwtExpiry}
+
+superbase:
+  auth-token: {superBaseAuthToken)
