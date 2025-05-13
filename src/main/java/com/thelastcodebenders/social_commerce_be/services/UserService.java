@@ -1,10 +1,12 @@
 package com.thelastcodebenders.social_commerce_be.services;
 
 import com.thelastcodebenders.social_commerce_be.exceptions.UserNotFoundException;
+import com.thelastcodebenders.social_commerce_be.models.dto.UserProfileRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.UserResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.User;
 import com.thelastcodebenders.social_commerce_be.repositories.UserRepository;
 import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +47,19 @@ public class UserService {
 
     public UserResponse getUserById(UUID userId) {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new).toDto();
+    }
+
+    @Transactional
+    public UserResponse updateUserProfile(UserProfileRequest request) {
+        User user = UserUtil.getLoggedInUser();
+
+        user.setActivated(true);
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setStreetAddress(request.getStreetAddress());
+        user.setState(request.getState());
+        user.setCountry(request.getCountry());
+
+        saveUser(user);
+        return user.toDto();
     }
 }

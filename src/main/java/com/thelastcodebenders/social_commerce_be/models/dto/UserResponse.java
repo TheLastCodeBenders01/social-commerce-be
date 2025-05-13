@@ -8,10 +8,21 @@ import java.util.UUID;
 @Data
 @Builder
 public class UserResponse {
-
     private UUID userId;
 
     private String firstName;
     private String lastName;
     private String email;
+    private boolean activated;
+
+    private String phoneNumber;
+    private Address address;
+
+    @Data
+    @Builder
+    public static class Address {
+        private String streetAddress;
+        private String state;
+        private String country;
+    }
 }

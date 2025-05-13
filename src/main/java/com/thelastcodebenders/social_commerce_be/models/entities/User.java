@@ -30,6 +30,12 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
+    @Builder.Default private boolean activated = false;
+
+    private String phoneNumber;
+    private String streetAddress;
+    private String state;
+    private String country;
 
     @Builder.Default private boolean isPrinter = false;
     @Builder.Default private boolean accountNonExpired = true;
@@ -54,6 +60,13 @@ public class User implements UserDetails {
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
+                .activated(activated)
+                .phoneNumber(phoneNumber)
+                .address(UserResponse.Address.builder()
+                        .streetAddress(streetAddress)
+                        .state(state)
+                        .country(country)
+                        .build())
                 .build();
     }
 }
