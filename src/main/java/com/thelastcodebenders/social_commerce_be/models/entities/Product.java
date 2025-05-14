@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -24,11 +26,13 @@ public class Product {
 
     private String name;
     private double amount;
+    private UUID userId;
 
     public ProductResponse toDto() {
         return ProductResponse.builder()
                 .amount(amount)
                 .name(name)
+                .userId(userId)
                 .build();
     }
 }

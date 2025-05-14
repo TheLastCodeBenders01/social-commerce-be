@@ -10,22 +10,22 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
   datasource:
-    username: {username}
-    password: {password}
-    url: {databaseUrl}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
 
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: {googleClientId}
-            client-secret: {googleClientSecret}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope: profile, email
 security:
   jwt:
-    secret-key: {jwtSecret}
-    expiration-time: {jwtExpiry}
+    secret-key: ${JWT_SECRET}
+    expiration-time: ${JWT_EXPIRY}
 
 superbase:
-  auth-token: {superBaseAuthToken)
+  auth-token: ${SUPERBASE_AUTH_TOKEN}

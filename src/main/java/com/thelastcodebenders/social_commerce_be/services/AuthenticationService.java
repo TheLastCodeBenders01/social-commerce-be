@@ -16,6 +16,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final CartService cartService;
 
     public void signUp(UserRequest userRequest) {
         User user = User.builder()
@@ -24,6 +25,8 @@ public class AuthenticationService {
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
                 .build();
+
+        cartService.createUserCart();
 
         userRepository.save(user);
     }

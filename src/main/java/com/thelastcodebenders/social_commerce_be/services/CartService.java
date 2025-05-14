@@ -1,0 +1,58 @@
+package com.thelastcodebenders.social_commerce_be.services;
+
+import com.thelastcodebenders.social_commerce_be.models.dto.CartResponse;
+import com.thelastcodebenders.social_commerce_be.models.entities.Cart;
+import com.thelastcodebenders.social_commerce_be.repositories.CartRepository;
+import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+
+@RequiredArgsConstructor
+@Service
+public class CartService {
+    private final CartRepository cartRepository;
+    private final ProductService productService;
+
+    public CartResponse addItemToCart(Long productId) {
+        Cart cart = cartRepository.findByUserId(UserUtil.getLoggedInUser().getUserId()).orElseGet(
+                this::createUserCart
+        );
+        cart.getProductIds().add(productId);
+        cart = saveCart(cart);
+
+        return buildCartResponseFromCart(cart);
+    }
+
+    public Cart createUserCart() {
+        return saveCart(
+                Cart.builder()
+                        .userId(UserUtil.getLoggedInUser().getUserId())
+                        .productIds(new ArrayList<>())
+                        .build()
+        );
+    }
+
+    public Cart saveCart(Cart cart) {
+        return cartRepository.save(cart);
+    }
+
+    public CartResponse buildCartResponseFromCart(Cart cart) {
+        return CartResponse.builder()
+                .cartId(cart.getCartId())
+                .totalAmount(productService.sumAmountByProductIds(cart.getProductIds()))
+                .products(
+                        cart.getProductIds().parallelStream().map(
+                                productId -> productService.getProductById(productId).toDto()
+                        ).toList()
+                )
+                .build();
+    }
+
+    public CartResponse getCartById() {
+        return buildCartResponseFromCart(cartRepository.findByUserId(UserUtil.getLoggedInUser().getUserId()).orElseGet(
+                this::createUserCart
+        ));
+    }
+}
