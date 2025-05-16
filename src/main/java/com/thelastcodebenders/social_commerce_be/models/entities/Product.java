@@ -33,6 +33,7 @@ public class Product {
                 .amount(amount)
                 .name(name)
                 .userId(userId)
+                .productId(productId)
                 .build();
     }
 }

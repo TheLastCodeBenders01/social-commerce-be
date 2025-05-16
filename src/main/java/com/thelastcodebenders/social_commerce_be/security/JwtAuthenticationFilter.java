@@ -1,5 +1,6 @@
 package com.thelastcodebenders.social_commerce_be.security;
 
+import com.thelastcodebenders.social_commerce_be.exceptions.NoAuthTokenException;
 import com.thelastcodebenders.social_commerce_be.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 
             log.warn("NO AUTH TOKEN?");
-            filterChain.doFilter(request, response);
+            handlerExceptionResolver.resolveException(request, response, null, new NoAuthTokenException());
             return;
         }
         try {

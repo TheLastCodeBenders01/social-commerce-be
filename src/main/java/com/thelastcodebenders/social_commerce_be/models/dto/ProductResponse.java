@@ -11,4 +11,5 @@ public class ProductResponse {
     private String name;
     private double amount;
     private UUID userId;
+    private long productId;
 }
