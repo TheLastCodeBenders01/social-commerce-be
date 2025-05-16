@@ -50,7 +50,7 @@ public class CartService {
                 .build();
     }
 
-    public CartResponse getCartById() {
+    public CartResponse getCartByUser() {
         return buildCartResponseFromCart(cartRepository.findByUserId(UserUtil.getLoggedInUser().getUserId()).orElseGet(
                 this::createUserCart
         ));

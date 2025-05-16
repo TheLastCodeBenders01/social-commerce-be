@@ -2,6 +2,7 @@ package com.thelastcodebenders.social_commerce_be.controllers;
 
 import com.thelastcodebenders.social_commerce_be.models.dto.ProductResponse;
 import com.thelastcodebenders.social_commerce_be.services.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,11 +17,13 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
+    @Operation(summary = "get product by id")
     @GetMapping("{productId}")
     public ProductResponse getProductById(@PathVariable Long productId) {
         return productService.getProductById(productId).toDto();
     }
 
+    @Operation(summary = "get user products")
     @GetMapping
     public List<ProductResponse> getUserProducts() {
         return productService.getUserProducts();

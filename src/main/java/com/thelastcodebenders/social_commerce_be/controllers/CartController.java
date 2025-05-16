@@ -2,6 +2,7 @@ package com.thelastcodebenders.social_commerce_be.controllers;
 
 import com.thelastcodebenders.social_commerce_be.models.dto.CartResponse;
 import com.thelastcodebenders.social_commerce_be.services.CartService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,13 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class CartController {
     private final CartService cartService;
 
+    @Operation(summary = "add procuct to cart")
     @PostMapping("{productId}")
     public CartResponse addItemToCart(@PathVariable Long productId) {
         return cartService.addItemToCart(productId);
     }
 
+    @Operation(summary = "get cart by user")
     @GetMapping
-    public CartResponse getCartById() {
-        return cartService.getCartById();
+    public CartResponse getCartByUser() {
+        return cartService.getCartByUser();
     }
 }
