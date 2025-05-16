@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -21,8 +22,15 @@ public class ProductService {
     }
 
     public List<Long> saveProducts(List<ProductRequest> productRequests) {
-        return productRepository.saveAll(productRequests.parallelStream().map(ProductRequest::toDb).toList())
+        UUID userId = UserUtil.getLoggedInUser().getUserId();
+        return productRepository.saveAll(productRequests.parallelStream().map(productRequest -> productRequest.toDb(userId)).toList())
                 .parallelStream().map(Product::getProductId).toList();
+    }
+
+    public List<ProductResponse> saveProductsAndGetResponse(List<ProductRequest> productRequests) {
+        UUID userId = UserUtil.getLoggedInUser().getUserId();
+        return productRepository.saveAll(productRequests.parallelStream().map(productRequest -> productRequest.toDb(userId)).toList())
+                .parallelStream().map(Product::toDto).toList();
     }
 
     public List<ProductResponse> findAllById(List<Long> productIds) {

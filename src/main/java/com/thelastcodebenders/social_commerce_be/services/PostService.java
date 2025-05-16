@@ -1,5 +1,8 @@
 package com.thelastcodebenders.social_commerce_be.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thelastcodebenders.social_commerce_be.adapter.FileServiceAdapter;
 import com.thelastcodebenders.social_commerce_be.exceptions.PostNotFoundException;
 import com.thelastcodebenders.social_commerce_be.models.dto.IdResponse;
@@ -26,17 +29,22 @@ public class PostService {
     private final PostRepository postRepository;
     private final FileServiceAdapter fileServiceAdapter;
     private final ProductService productService;
+    private final ObjectMapper objectMapper;
 
     @Transactional
-    public PostResponse createPost(PostRequest request, long postId) {
+    public PostResponse createPost(PostRequest request) throws JsonProcessingException {
+
+        List<Long> productIds = objectMapper.readValue(request.getProductIds(), new TypeReference<List<Long>>() {});
 
         // upload file
         String fileUrl = fileServiceAdapter.buildFileUri(fileServiceAdapter.uploadFile(request.getContent()));
 
         // save post
-        Post post = getPostById(postId);
-        post.setCaption(request.getCaption());
-        post.setContentUrl(fileUrl);
+        Post post = Post.builder()
+                .caption(request.getCaption())
+                .contentUrl(fileUrl)
+                .productIds(productIds)
+                .build();
 
         postRepository.save(post);
 

@@ -36,13 +36,7 @@ public class UserService {
 
     public UserResponse getLoggedInUser() {
         User user = UserUtil.getLoggedInUser();
-
-        return UserResponse.builder()
-                .userId(user.getUserId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .build();
+        return getUserById(user.getUserId());
     }
 
     public UserResponse getUserById(UUID userId) {

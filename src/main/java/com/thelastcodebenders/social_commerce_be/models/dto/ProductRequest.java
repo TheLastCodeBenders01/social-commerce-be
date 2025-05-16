@@ -1,7 +1,7 @@
 package com.thelastcodebenders.social_commerce_be.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thelastcodebenders.social_commerce_be.models.entities.Product;
-import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
 import lombok.Data;
 
 import java.util.UUID;
@@ -10,13 +10,14 @@ import java.util.UUID;
 public class ProductRequest {
     private String name;
     private double amount;
+    @JsonIgnore
     private UUID userId;
 
-    public Product toDb() {
+    public Product toDb(UUID userId) {
         return Product.builder()
                 .name(name)
                 .amount(amount)
-                .userId(UserUtil.getLoggedInUser().getUserId())
+                .userId(userId)
                 .build();
     }
 }
