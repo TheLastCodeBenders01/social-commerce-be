@@ -41,7 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 
             log.warn("NO AUTH TOKEN?");
-            handlerExceptionResolver.resolveException(request, response, null, new NoAuthTokenException());
+//            handlerExceptionResolver.resolveException(request, response, null, new NoAuthTokenException());
+            filterChain.doFilter(request, response);
             return;
         }
         try {
