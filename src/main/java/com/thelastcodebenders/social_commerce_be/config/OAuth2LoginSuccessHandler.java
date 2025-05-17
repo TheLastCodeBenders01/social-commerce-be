@@ -35,6 +35,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                                         Authentication authentication) {
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
         OAuth2User oAuth2User = authToken.getPrincipal();
+        log.info("Got the Oauth User {}", oAuth2User);
 
         String email = oAuth2User.getAttribute("email");
         String firstName = oAuth2User.getAttribute("given_name").toString().substring(0, 1).toUpperCase() + oAuth2User.getAttribute("given_name").toString().substring(1);

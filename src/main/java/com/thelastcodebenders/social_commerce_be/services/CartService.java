@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -29,6 +30,15 @@ public class CartService {
         return saveCart(
                 Cart.builder()
                         .userId(UserUtil.getLoggedInUser().getUserId())
+                        .productIds(new ArrayList<>())
+                        .build()
+        );
+    }
+
+    public void addCartToUserId(UUID userId) {
+        saveCart(
+                Cart.builder()
+                        .userId(userId)
                         .productIds(new ArrayList<>())
                         .build()
         );
