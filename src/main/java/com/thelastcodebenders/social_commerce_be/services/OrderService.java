@@ -1,5 +1,6 @@
 package com.thelastcodebenders.social_commerce_be.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thelastcodebenders.social_commerce_be.adapter.PaymentServiceAdapter;
 import com.thelastcodebenders.social_commerce_be.exceptions.OrderNotFoundException;
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -51,9 +53,12 @@ public class OrderService {
     }
 
     @Transactional
-    public AppResponse successfulPayment(KorapayWebhookRequest request) {
+    public AppResponse successfulPayment(Map<String, Object> plainRequest) {
 
-        log.info("Korapay Payload is: {}", request);
+        log.info("Korapay Payload is: {}", plainRequest);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        KorapayWebhookRequest request = objectMapper.convertValue(plainRequest, KorapayWebhookRequest.class);
         UUID reference = UUID.fromString(request.getData().getReference());
 
         log.info("Reference is {}", reference);
