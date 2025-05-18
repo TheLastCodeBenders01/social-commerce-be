@@ -53,6 +53,7 @@ public class OrderService {
     @Transactional
     public AppResponse successfulPayment(KorapayWebhookRequest request) {
 
+        log.info("Korapay Payload is: {}", request);
         UUID reference = UUID.fromString(request.getData().getReference());
 
         log.info("Reference is {}", reference);
