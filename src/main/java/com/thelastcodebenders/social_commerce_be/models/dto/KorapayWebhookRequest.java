@@ -8,5 +8,5 @@ import lombok.ToString;
 public class KorapayWebhookRequest {
 
     private String event;
-    private KorapayWebhookData data;
+    private String reference;
 }

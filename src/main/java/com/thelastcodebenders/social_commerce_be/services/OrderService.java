@@ -5,7 +5,6 @@ import com.thelastcodebenders.social_commerce_be.adapter.PaymentServiceAdapter;
 import com.thelastcodebenders.social_commerce_be.exceptions.OrderNotFoundException;
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.KorapayWebhookRequest;
-import com.thelastcodebenders.social_commerce_be.models.dto.PaymentStatus;
 import com.thelastcodebenders.social_commerce_be.models.entities.Cart;
 import com.thelastcodebenders.social_commerce_be.models.entities.Order;
 import com.thelastcodebenders.social_commerce_be.models.entities.User;
@@ -59,18 +58,18 @@ public class OrderService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         KorapayWebhookRequest request = objectMapper.convertValue(plainRequest, KorapayWebhookRequest.class);
-        UUID reference = UUID.fromString(request.getData().getReference());
+        UUID reference = UUID.fromString(request.getReference());
 
         log.info("Reference is {}", reference);
         Order order = getOrderById(reference);
         order.setPaid(true);
 
-        if (request.getData().getStatus().equals(PaymentStatus.success)) {
+        if (request.getEvent().equals("charge.success")) {
             orderRepository.save(order);
             cartService.removeItemsInUserCart(order.getUserid());
         }
 
-        String responseMessage = String.format("Payment status successfully updated to: %s", request.getData().getStatus());
+        String responseMessage = String.format("Payment status successfully updated to: %s", request.getEvent());
 
         log.info(responseMessage);
 
