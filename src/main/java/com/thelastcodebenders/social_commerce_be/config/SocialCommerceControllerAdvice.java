@@ -1,5 +1,6 @@
 package com.thelastcodebenders.social_commerce_be.config;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thelastcodebenders.social_commerce_be.exceptions.EntityNotFoundException;
 import com.thelastcodebenders.social_commerce_be.exceptions.UnauthorizedException;
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
@@ -45,6 +46,17 @@ public class SocialCommerceControllerAdvice {
                 .status(HttpStatus.UNAUTHORIZED).build();
 
         return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(JsonProcessingException.class)
+    public ResponseEntity<AppResponse> handleJsonProcessingException(JsonProcessingException ex, WebRequest request) {
+
+        log.error(ex.getMessage());
+        AppResponse message = AppResponse.builder()
+                .message("Error parsing to Json/List")
+                .status(HttpStatus.BAD_REQUEST).build();
+
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
