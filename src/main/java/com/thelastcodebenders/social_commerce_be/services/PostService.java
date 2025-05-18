@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -34,7 +36,10 @@ public class PostService {
     @Transactional
     public PostResponse createPost(PostRequest request) throws JsonProcessingException {
 
-        List<Long> productIds = objectMapper.readValue(request.getProductIds(), new TypeReference<List<Long>>() {});
+        List<Long> productIds = new ArrayList<>();
+        if (request.getProductIds() != null && !request.getProductIds().isEmpty()) {
+            productIds = objectMapper.readValue(request.getProductIds(), new TypeReference<List<Long>>() {});
+        }
 
         // upload file
         String fileUrl = fileServiceAdapter.buildFileUri(fileServiceAdapter.uploadFile(request.getContent()));
