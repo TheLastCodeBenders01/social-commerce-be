@@ -31,3 +31,8 @@ security:
 
 superbase:
   auth-token: ${SUPERBASE_AUTH_TOKEN}
+
+x-aggregator:
+  notification-url: ${PAYMENT_NOTIFICATION_URL}
+  redirect-url: ${PAYMENT_REDIRECT_URL}
+  secret-key: ${PAYMENT_SECRET_KEY}

@@ -1,7 +1,9 @@
 package com.thelastcodebenders.social_commerce_be.controllers;
 
+import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.CartResponse;
 import com.thelastcodebenders.social_commerce_be.services.CartService;
+import com.thelastcodebenders.social_commerce_be.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CartController {
     private final CartService cartService;
+    private final OrderService orderService;
 
     @Operation(summary = "add procuct to cart")
     @PostMapping("{productId}")
@@ -26,5 +29,10 @@ public class CartController {
     @GetMapping
     public CartResponse getCartByUser() {
         return cartService.getCartByUser();
+    }
+
+    @GetMapping("initiate-checkout")
+    public AppResponse initiateCheckout() {
+        return orderService.initiateCheckout();
     }
 }

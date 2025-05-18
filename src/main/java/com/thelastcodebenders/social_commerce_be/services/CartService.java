@@ -4,6 +4,7 @@ import com.thelastcodebenders.social_commerce_be.models.dto.CartResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Cart;
 import com.thelastcodebenders.social_commerce_be.repositories.CartRepository;
 import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -64,5 +65,17 @@ public class CartService {
         return buildCartResponseFromCart(cartRepository.findByUserId(UserUtil.getLoggedInUser().getUserId()).orElseGet(
                 this::createUserCart
         ));
+    }
+
+    public Cart getLoggedInUserCart() {
+        return cartRepository.findByUserId(UserUtil.getLoggedInUser().getUserId()).get();
+    }
+
+    @Transactional
+    public void removeItemsInUserCart(UUID userid) {
+        Cart cart = cartRepository.findByUserId(userid).get();
+        cart.setProductIds(new ArrayList<>());
+
+        saveCart(cart);
     }
 }
