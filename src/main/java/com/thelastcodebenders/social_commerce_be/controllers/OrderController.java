@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RequiredArgsConstructor
 @RequestMapping("orders")
 @RestController
@@ -22,7 +20,7 @@ public class OrderController {
 
     @Hidden
     @PostMapping("payments/confirm")
-    public AppResponse successfulPayment(@RequestBody Map<String, Object> request) throws OrderNotFoundException {
+    public AppResponse successfulPayment(@RequestBody KorapayWebhookRequest request) throws OrderNotFoundException {
 
         return orderService.successfulPayment(request);
     }
