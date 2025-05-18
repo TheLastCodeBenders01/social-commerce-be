@@ -1,6 +1,7 @@
 package com.thelastcodebenders.social_commerce_be.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.thelastcodebenders.social_commerce_be.models.dto.OrderResponse;
+import com.thelastcodebenders.social_commerce_be.models.dto.ProductResponse;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -30,7 +31,7 @@ public class Order {
     @Id
     @Builder.Default private UUID orderId = UUID.randomUUID();
 
-    private UUID userid;
+    private UUID userId;
 
     @Transient
     private double totalAmount;
@@ -41,4 +42,15 @@ public class Order {
     @CollectionTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"))
     @Column(name = "product_id")
     private List<Long> productIds;
+
+    public OrderResponse toDto(List<ProductResponse> products) {
+        double totalAmount = products.parallelStream().mapToDouble(ProductResponse::getAmount).sum();
+        return OrderResponse.builder()
+                .orderId(orderId)
+                .userId(userId)
+                .paid(paid)
+                .totalAmount(totalAmount)
+                .products(products)
+                .build();
+    }
 }

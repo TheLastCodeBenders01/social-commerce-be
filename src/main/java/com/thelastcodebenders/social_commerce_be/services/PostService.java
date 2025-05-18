@@ -62,7 +62,7 @@ public class PostService {
         return postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
     }
 
-    private List<ProductResponse> buildProductResponsesFromProductIds(List<Long> productIds) {
+    public List<ProductResponse> buildProductResponsesFromProductIds(List<Long> productIds) {
         return productService.findAllById(productIds);
     }
 

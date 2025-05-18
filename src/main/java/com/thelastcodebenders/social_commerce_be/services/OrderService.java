@@ -4,6 +4,7 @@ import com.thelastcodebenders.social_commerce_be.adapter.PaymentServiceAdapter;
 import com.thelastcodebenders.social_commerce_be.exceptions.OrderNotFoundException;
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.KorapayWebhookRequest;
+import com.thelastcodebenders.social_commerce_be.models.dto.OrderResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Cart;
 import com.thelastcodebenders.social_commerce_be.models.entities.Order;
 import com.thelastcodebenders.social_commerce_be.models.entities.User;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -39,7 +42,7 @@ public class OrderService {
         Cart cart = cartService.getLoggedInUserCart();
 
         Order order = Order.builder()
-                .userid(user.getUserId())
+                .userId(user.getUserId())
                 .totalAmount(productService.sumAmountByProductIds(cart.getProductIds()))
                 .productIds(cart.getProductIds())
                 .build();
@@ -61,7 +64,7 @@ public class OrderService {
 
         if (request.getEvent().equals("charge.success")) {
             orderRepository.save(order);
-            cartService.removeItemsInUserCart(order.getUserid());
+            cartService.removeItemsInUserCart(order.getUserId());
         }
 
         String responseMessage = String.format("Payment status successfully updated to: %s", request.getEvent());
@@ -71,5 +74,15 @@ public class OrderService {
         return AppResponse.builder()
                 .message(responseMessage)
                 .status(HttpStatus.OK).build();
+    }
+
+    public List<OrderResponse> getUserOrders() {
+        return orderRepository.findAllByUserId(UserUtil.getLoggedInUser().getUserId()).parallelStream().map(
+                order -> order.toDto(
+                        order.getProductIds().parallelStream().map(
+                                productId -> productService.getProductById(productId).toDto()
+                        ).toList()
+                )
+        ).toList();
     }
 }
