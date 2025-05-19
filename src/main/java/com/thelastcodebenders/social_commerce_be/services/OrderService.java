@@ -5,6 +5,7 @@ import com.thelastcodebenders.social_commerce_be.exceptions.OrderNotFoundExcepti
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.KorapayWebhookRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.OrderResponse;
+import com.thelastcodebenders.social_commerce_be.models.dto.PaymentResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Cart;
 import com.thelastcodebenders.social_commerce_be.models.entities.Order;
 import com.thelastcodebenders.social_commerce_be.models.entities.User;
@@ -37,7 +38,7 @@ public class OrderService {
     }
 
     @Transactional
-    public AppResponse initiateCheckout() {
+    public PaymentResponse initiateCheckout() {
         User user = UserUtil.getLoggedInUser();
         Cart cart = cartService.getLoggedInUserCart();
 

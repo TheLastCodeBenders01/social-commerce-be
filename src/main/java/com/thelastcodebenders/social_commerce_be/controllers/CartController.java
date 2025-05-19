@@ -1,7 +1,7 @@
 package com.thelastcodebenders.social_commerce_be.controllers;
 
-import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.CartResponse;
+import com.thelastcodebenders.social_commerce_be.models.dto.PaymentResponse;
 import com.thelastcodebenders.social_commerce_be.services.CartService;
 import com.thelastcodebenders.social_commerce_be.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ public class CartController {
     }
 
     @GetMapping("initiate-checkout")
-    public AppResponse initiateCheckout() {
+    public PaymentResponse initiateCheckout() {
         return orderService.initiateCheckout();
     }
 }

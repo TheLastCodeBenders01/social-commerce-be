@@ -1,8 +1,8 @@
 package com.thelastcodebenders.social_commerce_be.adapter;
 
-import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.CustomerDetails;
 import com.thelastcodebenders.social_commerce_be.models.dto.InitiateCheckoutRequest;
+import com.thelastcodebenders.social_commerce_be.models.dto.PaymentResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.types.Currency;
 import com.thelastcodebenders.social_commerce_be.models.entities.Order;
 import com.thelastcodebenders.social_commerce_be.models.entities.User;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,7 +32,7 @@ public class PaymentServiceAdapter {
 
     private final String xAggregatorBaseUrl = "https://x-aggregator-staging.up.railway.app";
 
-    public AppResponse initiatePayment(Order order, User user) {
+    public PaymentResponse initiatePayment(Order order, User user) {
         InitiateCheckoutRequest checkoutRequest = InitiateCheckoutRequest.builder()
                 .customer(
                         CustomerDetails.builder()
@@ -57,9 +56,6 @@ public class PaymentServiceAdapter {
         HttpEntity<InitiateCheckoutRequest> requestEntity = new HttpEntity<>(checkoutRequest, headers);
 
         log.info("Attempting to call x aggregator api with request: {}", requestEntity);
-        String response = restTemplate.exchange(String.format("%s/api/v1/initiate", xAggregatorBaseUrl), HttpMethod.POST, requestEntity, String.class).getBody();
-        return AppResponse.builder()
-                .message(response)
-                .status(HttpStatus.OK).build();
+        return restTemplate.exchange(String.format("%s/api/v1/initiate", xAggregatorBaseUrl), HttpMethod.POST, requestEntity, PaymentResponse.class).getBody();
     }
 }
