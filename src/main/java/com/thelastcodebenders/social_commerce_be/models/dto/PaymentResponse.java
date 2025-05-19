@@ -12,3 +12,4 @@ public class PaymentResponse {
     private String checkout_url;
     private String processor;
 }
+
