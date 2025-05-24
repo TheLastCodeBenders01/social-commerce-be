@@ -1,15 +1,19 @@
 package com.thelastcodebenders.social_commerce_be.controllers;
 
+import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.UserProfileRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.UserResponse;
 import com.thelastcodebenders.social_commerce_be.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RequestMapping("users")
@@ -27,5 +31,11 @@ public class UserController {
     @GetMapping("get-logged-in-user")
     public UserResponse getLoggedInUser() {
         return userService.getLoggedInUser();
+    }
+
+    @Operation(summary = "follow user")
+    @PutMapping("follow/{userId}")
+    public AppResponse followUser(@PathVariable UUID userId) {
+        return userService.followUser(userId);
     }
 }

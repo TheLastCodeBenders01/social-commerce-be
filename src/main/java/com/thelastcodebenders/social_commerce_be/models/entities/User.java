@@ -1,8 +1,14 @@
 package com.thelastcodebenders.social_commerce_be.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thelastcodebenders.social_commerce_be.models.dto.UserResponse;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +18,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +46,18 @@ public class User implements UserDetails {
     private String state;
     private String country;
 
+    @JsonIgnore
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_followers", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "follower_id")
+    private List<UUID> followerIds = new ArrayList<>();
+
+    @JsonIgnore
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_followings", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "following_id")
+    private List<UUID> followingIds = new ArrayList<>();
+
     @Builder.Default private boolean isPrinter = false;
     @Builder.Default private boolean accountNonExpired = true;
     @Builder.Default private boolean accountNonLocked = true;
@@ -64,6 +83,8 @@ public class User implements UserDetails {
                 .email(email)
                 .activated(activated)
                 .phoneNumber(phoneNumber)
+                .followerIds(followerIds)
+                .followingIds(followingIds)
                 .address(UserResponse.Address.builder()
                         .streetAddress(streetAddress)
                         .state(state)

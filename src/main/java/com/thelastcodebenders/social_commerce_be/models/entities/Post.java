@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +42,13 @@ public class Post {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "post_products", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "product_id")
-    private List<Long> productIds;
+    private List<Long> productIds = new ArrayList<>();
+
+    @JsonIgnore
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "post_likes", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "liker_id")
+    private List<UUID> likeIds = new ArrayList<>();
 
     public PostResponse toDto(List<ProductResponse> products) {
         return PostResponse.builder()
@@ -50,6 +57,7 @@ public class Post {
                 .caption(caption)
                 .products(products)
                 .userId(userId)
+                .likes(likeIds.parallelStream().count())
                 .build();
     }
 }

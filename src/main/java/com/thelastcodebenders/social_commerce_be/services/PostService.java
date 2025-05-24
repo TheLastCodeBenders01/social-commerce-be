@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thelastcodebenders.social_commerce_be.adapter.FileServiceAdapter;
 import com.thelastcodebenders.social_commerce_be.exceptions.PostNotFoundException;
+import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.IdResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostResponse;
@@ -19,10 +20,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -98,5 +101,26 @@ public class PostService {
         return posts.parallelStream().map(
                 post -> post.toDto(productService.findAllById(post.getProductIds()))
         ).toList();
+    }
+
+    public AppResponse likePost(Long postId) {
+        Post post = getPostById(postId);
+        UUID userId = UserUtil.getLoggedInUser().getUserId();
+        String message;
+
+        if (post.getLikeIds().contains(userId)) {
+            post.getLikeIds().remove(userId);
+            message = "Unliked";
+        }
+        else {
+            post.getLikeIds().add(UserUtil.getLoggedInUser().getUserId());
+            message = "Liked";
+        }
+
+        savePost(post);
+        return AppResponse.builder()
+                .message(message + " Post")
+                .status(HttpStatus.OK)
+                .build();
     }
 }

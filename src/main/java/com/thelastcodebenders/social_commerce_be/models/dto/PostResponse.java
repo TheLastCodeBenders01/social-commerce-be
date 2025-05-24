@@ -14,4 +14,5 @@ public class PostResponse {
     private String caption;
     private UUID userId;
     private List<ProductResponse> products;
+    private long likes;
 }

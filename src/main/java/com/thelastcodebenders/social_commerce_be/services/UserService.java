@@ -1,6 +1,7 @@
 package com.thelastcodebenders.social_commerce_be.services;
 
 import com.thelastcodebenders.social_commerce_be.exceptions.UserNotFoundException;
+import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.UserProfileRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.UserResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.User;
@@ -8,6 +9,7 @@ import com.thelastcodebenders.social_commerce_be.repositories.UserRepository;
 import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -55,5 +57,31 @@ public class UserService {
 
         saveUser(user);
         return user.toDto();
+    }
+
+    @Transactional
+    public AppResponse followUser(UUID userId) {
+        User loggedInUser = UserUtil.getLoggedInUser();
+        User toBeFollowed = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        String message;
+
+        if (loggedInUser.getFollowingIds().contains(toBeFollowed.getUserId())) {
+            loggedInUser.getFollowingIds().remove(toBeFollowed.getUserId());
+            toBeFollowed.getFollowerIds().remove(loggedInUser.getUserId());
+            message = "Unfollow";
+        }
+        else {
+            loggedInUser.getFollowingIds().add(toBeFollowed.getUserId());
+            toBeFollowed.getFollowerIds().add(loggedInUser.getUserId());
+            message = "Follow";
+        }
+
+        saveUser(loggedInUser);
+        saveUser(toBeFollowed);
+
+        return AppResponse.builder()
+                .message(message + " success")
+                .status(HttpStatus.OK)
+                .build();
     }
 }

@@ -3,6 +3,7 @@ package com.thelastcodebenders.social_commerce_be.models.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,6 +18,8 @@ public class UserResponse {
 
     private String phoneNumber;
     private Address address;
+    private List<UUID> followerIds;
+    private List<UUID> followingIds;
 
     @Data
     @Builder
