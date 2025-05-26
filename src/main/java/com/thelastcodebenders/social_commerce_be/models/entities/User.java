@@ -50,7 +50,7 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_followers", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "follower_id")
-    private List<UUID> followerIds = new ArrayList<>();
+    @Builder.Default private List<UUID> followerIds = new ArrayList<>();
 
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)

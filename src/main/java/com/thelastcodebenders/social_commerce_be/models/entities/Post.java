@@ -42,7 +42,7 @@ public class Post {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "post_products", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "product_id")
-    private List<Long> productIds = new ArrayList<>();
+    @Builder.Default private List<Long> productIds = new ArrayList<>();
 
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
