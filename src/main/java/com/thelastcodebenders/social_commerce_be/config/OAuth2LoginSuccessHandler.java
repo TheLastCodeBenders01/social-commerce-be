@@ -54,10 +54,10 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         LoginResponse loginResponse = authenticationService.oauthLogin(email);
 
-//        response.sendRedirect(String.format("%s/signin/?continue=%s", frontendBaseUrl, loginResponse.getToken()));
-        response.setStatus(HttpServletResponse.SC_OK); // Set status code
-        response.setContentType("application/json"); // Set content type
-        response.getWriter().write("{\"token\":\"" + loginResponse.getToken() + "\"}"); // Write response body
-        response.getWriter().flush();
+        response.sendRedirect(String.format("%s/auth/callback/?continue=%s", frontendBaseUrl, loginResponse.getToken()));
+//        response.setStatus(HttpServletResponse.SC_OK); // Set status code
+//        response.setContentType("application/json"); // Set content type
+//        response.getWriter().write("{\"token\":\"" + loginResponse.getToken() + "\"}"); // Write response body
+//        response.getWriter().flush();
     }
 }
