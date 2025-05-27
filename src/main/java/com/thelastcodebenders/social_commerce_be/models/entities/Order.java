@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ public class Order {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"))
     @Column(name = "product_id")
-    private List<Long> productIds;
+    @Builder.Default private List<Long> productIds = new ArrayList<>();
 
     public OrderResponse toDto(List<ProductResponse> products) {
         double totalAmount = products.parallelStream().mapToDouble(ProductResponse::getAmount).sum();

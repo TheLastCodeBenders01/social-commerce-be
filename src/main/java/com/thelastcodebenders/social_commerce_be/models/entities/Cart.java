@@ -16,6 +16,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public class Cart {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "cart_products", joinColumns = @JoinColumn(name = "cart_id"))
     @Column(name = "product_id")
-    private List<Long> productIds;
+    @Builder.Default private List<Long> productIds = new ArrayList<>();
 
     @Column(unique = true)
     private UUID userId;

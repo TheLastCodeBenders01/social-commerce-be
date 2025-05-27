@@ -48,7 +48,7 @@ public class Post {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "post_likes", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "liker_id")
-    private List<UUID> likeIds = new ArrayList<>();
+    @Builder.Default private List<UUID> likeIds = new ArrayList<>();
 
     public PostResponse toDto(List<ProductResponse> products) {
         return PostResponse.builder()

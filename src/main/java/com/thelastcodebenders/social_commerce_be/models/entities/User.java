@@ -56,7 +56,7 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_followings", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "following_id")
-    private List<UUID> followingIds = new ArrayList<>();
+    @Builder.Default private List<UUID> followingIds = new ArrayList<>();
 
     @Builder.Default private boolean isPrinter = false;
     @Builder.Default private boolean accountNonExpired = true;
