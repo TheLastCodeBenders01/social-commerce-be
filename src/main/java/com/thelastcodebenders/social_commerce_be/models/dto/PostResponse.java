@@ -19,4 +19,5 @@ public class PostResponse {
     private String fullName;
     private Instant createdAt;
     private Instant updatedAt;
+    private boolean liked;
 }

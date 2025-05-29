@@ -54,7 +54,7 @@ public class Post {
     @Column(name = "liker_id")
     @Builder.Default private List<UUID> likeIds = new ArrayList<>();
 
-    public PostResponse toDto(List<ProductResponse> products, User postUser) {
+    public PostResponse toDto(User user, List<ProductResponse> products, User postUser) {
         return PostResponse.builder()
                 .postId(postId)
                 .contentUrl(contentUrl)
@@ -65,6 +65,9 @@ public class Post {
                 .fullName(String.format("%s %s", postUser.getFirstName(), postUser.getLastName()))
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
+                .liked(
+                        likeIds.contains(user.getUserId())
+                )
                 .build();
     }
 }

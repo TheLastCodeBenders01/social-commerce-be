@@ -12,6 +12,7 @@ import com.thelastcodebenders.social_commerce_be.models.dto.PostResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.ProductRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.ProductResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Post;
+import com.thelastcodebenders.social_commerce_be.models.entities.User;
 import com.thelastcodebenders.social_commerce_be.repositories.PostRepository;
 import com.thelastcodebenders.social_commerce_be.repositories.specifications.PostSpecification;
 import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
@@ -60,7 +61,7 @@ public class PostService {
 
         // build response
         List<ProductResponse> productResponses = buildProductResponsesFromProductIds(post.getProductIds());
-        return post.toDto(productResponses, userService.findByUserId(post.getUserId()));
+        return post.toDto(UserUtil.getLoggedInUser(), productResponses, userService.findByUserId(post.getUserId()));
     }
 
     private Post getPostById(long postId) {
@@ -100,8 +101,9 @@ public class PostService {
     }
 
     public List<PostResponse> convertPostListToPostListResponse(List<Post> posts) {
+        User user = UserUtil.getLoggedInUser();
         return posts.parallelStream().map(
-                post -> post.toDto(productService.findAllById(post.getProductIds()), userService.findByUserId(post.getUserId()))
+                post -> post.toDto(user, productService.findAllById(post.getProductIds()), userService.findByUserId(post.getUserId()))
         ).toList();
     }
 
