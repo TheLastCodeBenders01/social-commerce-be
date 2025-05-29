@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,10 +20,16 @@ public class CartController {
     private final CartService cartService;
     private final OrderService orderService;
 
-    @Operation(summary = "add procuct to cart")
+    @Operation(summary = "add product to cart")
     @PostMapping("{productId}")
     public CartResponse addItemToCart(@PathVariable Long productId) {
         return cartService.addItemToCart(productId);
+    }
+
+    @Operation(summary = "remove item from cart")
+    @PutMapping("{productId}")
+    public CartResponse removeItemFromCart(@PathVariable Long productId) {
+        return  cartService.removeItemFromCart(productId);
     }
 
     @Operation(summary = "get cart by user")

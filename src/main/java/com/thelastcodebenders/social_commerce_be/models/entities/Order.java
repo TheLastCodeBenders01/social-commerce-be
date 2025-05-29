@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +39,9 @@ public class Order {
     private double totalAmount;
 
     @Builder.Default private boolean paid = false;
+
+    @Builder.Default private Instant createdAt = Instant.now();
+    @Builder.Default private Instant updatedAt = Instant.now();
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"))

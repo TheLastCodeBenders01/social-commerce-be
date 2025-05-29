@@ -35,6 +35,7 @@ public class PostService {
     private final FileServiceAdapter fileServiceAdapter;
     private final ProductService productService;
     private final ObjectMapper objectMapper;
+    private final UserService userService;
 
     @Transactional
     public PostResponse createPost(PostRequest request) throws JsonProcessingException {
@@ -52,13 +53,14 @@ public class PostService {
                 .caption(request.getCaption())
                 .contentUrl(fileUrl)
                 .productIds(productIds)
+                .userId(UserUtil.getLoggedInUser().getUserId())
                 .build();
 
         postRepository.save(post);
 
         // build response
         List<ProductResponse> productResponses = buildProductResponsesFromProductIds(post.getProductIds());
-        return post.toDto(productResponses);
+        return post.toDto(productResponses, userService.findByUserId(post.getUserId()));
     }
 
     private Post getPostById(long postId) {
@@ -99,7 +101,7 @@ public class PostService {
 
     public List<PostResponse> convertPostListToPostListResponse(List<Post> posts) {
         return posts.parallelStream().map(
-                post -> post.toDto(productService.findAllById(post.getProductIds()))
+                post -> post.toDto(productService.findAllById(post.getProductIds()), userService.findByUserId(post.getUserId()))
         ).toList();
     }
 

@@ -1,5 +1,6 @@
 package com.thelastcodebenders.social_commerce_be.services;
 
+import com.thelastcodebenders.social_commerce_be.exceptions.CartNotFoundException;
 import com.thelastcodebenders.social_commerce_be.models.dto.CartResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Cart;
 import com.thelastcodebenders.social_commerce_be.repositories.CartRepository;
@@ -77,5 +78,14 @@ public class CartService {
         cart.setProductIds(new ArrayList<>());
 
         saveCart(cart);
+    }
+
+    public CartResponse removeItemFromCart(Long productId) {
+        Cart cart = cartRepository.findByUserId(UserUtil.getLoggedInUser().getUserId()).orElseThrow(CartNotFoundException::new);
+
+        cart.getProductIds().remove(productId);
+        cart = saveCart(cart);
+
+        return buildCartResponseFromCart(cart);
     }
 }

@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,6 +39,9 @@ public class Post {
 
     private UUID userId;
 
+    @Builder.Default private Instant createdAt = Instant.now();
+    @Builder.Default private Instant updatedAt = Instant.now();
+
     @JsonIgnore
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "post_products", joinColumns = @JoinColumn(name = "post_id"))
@@ -50,7 +54,7 @@ public class Post {
     @Column(name = "liker_id")
     @Builder.Default private List<UUID> likeIds = new ArrayList<>();
 
-    public PostResponse toDto(List<ProductResponse> products) {
+    public PostResponse toDto(List<ProductResponse> products, User postUser) {
         return PostResponse.builder()
                 .postId(postId)
                 .contentUrl(contentUrl)
@@ -58,6 +62,9 @@ public class Post {
                 .products(products)
                 .userId(userId)
                 .likes(likeIds.parallelStream().count())
+                .fullName(String.format("%s %s", postUser.getFirstName(), postUser.getLastName()))
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
                 .build();
     }
 }
