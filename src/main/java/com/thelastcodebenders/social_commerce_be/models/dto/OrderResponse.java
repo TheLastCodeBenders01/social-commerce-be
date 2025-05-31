@@ -14,4 +14,5 @@ public class OrderResponse {
     private double totalAmount;
     private boolean paid;
     private List<ProductResponse> products;
+    private UserResponse.Address address;
 }

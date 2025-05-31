@@ -2,6 +2,7 @@ package com.thelastcodebenders.social_commerce_be.models.entities;
 
 import com.thelastcodebenders.social_commerce_be.models.dto.OrderResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.ProductResponse;
+import com.thelastcodebenders.social_commerce_be.models.dto.UserResponse;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -48,9 +49,16 @@ public class Order {
     @Column(name = "product_id")
     @Builder.Default private List<Long> productIds = new ArrayList<>();
 
-    public OrderResponse toDto(List<ProductResponse> products) {
+    public OrderResponse toDto(List<ProductResponse> products, User user) {
         double totalAmount = products.parallelStream().mapToDouble(ProductResponse::getAmount).sum();
         return OrderResponse.builder()
+                .address(
+                        UserResponse.Address.builder()
+                                .streetAddress(user.getStreetAddress())
+                                .state(user.getState())
+                                .country(user.getCountry())
+                        .build()
+                )
                 .orderId(orderId)
                 .userId(userId)
                 .paid(paid)

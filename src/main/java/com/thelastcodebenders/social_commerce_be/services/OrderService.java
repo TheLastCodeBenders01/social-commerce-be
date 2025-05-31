@@ -28,6 +28,7 @@ public class OrderService {
     private final CartService cartService;
     private final PaymentServiceAdapter paymentServiceAdapter;
     private final ProductService productService;
+    private final UserService userService;
 
     public void saveOder(Order order) {
         orderRepository.save(order);
@@ -79,11 +80,14 @@ public class OrderService {
 
     public List<OrderResponse> getUserOrders() {
         return orderRepository.findAllByUserId(UserUtil.getLoggedInUser().getUserId()).parallelStream().map(
-                order -> order.toDto(
-                        order.getProductIds().parallelStream().map(
-                                productId -> productService.getProductById(productId).toDto()
-                        ).toList()
-                )
+                order -> {
+                    User user = userService.findByUserId(order.getUserId());
+                    return order.toDto(
+                            order.getProductIds().parallelStream().map(
+                                    productId -> productService.getProductById(productId).toDto()
+                            ).toList(), user
+                    );
+                }
         ).toList();
     }
 }
