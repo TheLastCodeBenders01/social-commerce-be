@@ -3,6 +3,7 @@ package com.thelastcodebenders.social_commerce_be.models.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,4 +16,5 @@ public class OrderResponse {
     private boolean paid;
     private List<ProductResponse> products;
     private UserResponse.Address address;
+    private Instant createdAt;
 }

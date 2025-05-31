@@ -64,6 +64,7 @@ public class Order {
                 .paid(paid)
                 .totalAmount(totalAmount)
                 .products(products)
+                .createdAt(createdAt)
                 .build();
     }
 }
