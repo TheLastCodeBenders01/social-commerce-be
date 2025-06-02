@@ -44,7 +44,7 @@ public class PaymentServiceAdapter {
                 .currency(Currency.NGN)
                 .reference(order.getOrderId())
                 .processor("kora")
-                .redirectUrl(xAggregatorRedirectUrl)
+                .redirectUrl(String.format("%s?orderId=%s", xAggregatorRedirectUrl, order.getOrderId()))
                 .notificationUrl(xAggregatorNotificationUrl)
                 .narration("Order for social commerce application with orderId " + order.getOrderId())
                 .mode("card")
