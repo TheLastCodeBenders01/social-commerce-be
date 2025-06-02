@@ -6,6 +6,7 @@ import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.KorapayWebhookRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.OrderResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.PaymentResponse;
+import com.thelastcodebenders.social_commerce_be.models.dto.ProductResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Cart;
 import com.thelastcodebenders.social_commerce_be.models.entities.Order;
 import com.thelastcodebenders.social_commerce_be.models.entities.User;
@@ -79,7 +80,19 @@ public class OrderService {
     }
 
     public List<OrderResponse> getUserOrders() {
-        return orderRepository.findAllByUserId(UserUtil.getLoggedInUser().getUserId()).parallelStream().map(
+        return convertOrdersToDto(orderRepository.findAllByUserId(UserUtil.getLoggedInUser().getUserId()));
+    }
+
+    public List<OrderResponse> getPurchasedOrdersForVendor() {
+        List<Long> userProductIds = productService.getUserProducts().parallelStream().map(
+                ProductResponse::getProductId
+        ).toList();
+
+        return convertOrdersToDto(orderRepository.findOrdersByProductIdsContainingAny(userProductIds));
+    }
+
+    public List<OrderResponse> convertOrdersToDto(List<Order> orders) {
+        return orders.parallelStream().map(
                 order -> {
                     User user = userService.findByUserId(order.getUserId());
                     return order.toDto(

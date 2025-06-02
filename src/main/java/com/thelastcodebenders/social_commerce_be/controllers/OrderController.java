@@ -35,4 +35,10 @@ public class OrderController {
     public List<OrderResponse> getUserOrders() {
         return orderService.getUserOrders();
     }
+
+    @Operation(summary = "get purchased orders for vendor")
+    @GetMapping("vendors/me")
+    public List<OrderResponse> getPurchasedOrdersForVendor() {
+        return orderService.getPurchasedOrdersForVendor();
+    }
 }
