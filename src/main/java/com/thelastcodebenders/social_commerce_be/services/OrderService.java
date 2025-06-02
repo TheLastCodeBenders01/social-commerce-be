@@ -63,9 +63,9 @@ public class OrderService {
 
         log.info("Reference is {}", reference);
         Order order = getOrderById(reference);
-        order.setPaid(true);
 
         if (request.getEvent().equals("charge.success")) {
+            order.setPaid(true);
             orderRepository.save(order);
             cartService.removeItemsInUserCart(order.getUserId());
         }
@@ -102,5 +102,16 @@ public class OrderService {
                     );
                 }
         ).toList();
+    }
+
+    public OrderResponse findOrderById(UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(OrderNotFoundException::new);
+        User user = userService.findByUserId(order.getUserId());
+
+        return order.toDto(
+                order.getProductIds().parallelStream().map(
+                        productId -> productService.getProductById(productId).toDto()
+                ).toList(), user
+        );
     }
 }

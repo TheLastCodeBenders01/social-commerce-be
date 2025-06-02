@@ -9,12 +9,14 @@ import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RequestMapping("orders")
@@ -26,8 +28,13 @@ public class OrderController {
     @Hidden
     @PostMapping("payments/confirm")
     public AppResponse successfulPayment(@RequestBody KorapayWebhookRequest request) throws OrderNotFoundException {
-
         return orderService.successfulPayment(request);
+    }
+
+    @Operation(summary = "get order by id")
+    @GetMapping("{orderId}")
+    public OrderResponse getOrderById(@PathVariable UUID orderId) {
+        return orderService.findOrderById(orderId);
     }
 
     @Operation(summary = "get user orders")
