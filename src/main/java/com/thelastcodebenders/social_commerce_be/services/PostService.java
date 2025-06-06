@@ -6,12 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thelastcodebenders.social_commerce_be.adapter.FileServiceAdapter;
 import com.thelastcodebenders.social_commerce_be.exceptions.PostNotFoundException;
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
+import com.thelastcodebenders.social_commerce_be.models.dto.CommentRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.IdResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.ProductRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.ProductResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Post;
+import com.thelastcodebenders.social_commerce_be.models.entities.Comment;
 import com.thelastcodebenders.social_commerce_be.models.entities.User;
 import com.thelastcodebenders.social_commerce_be.repositories.PostRepository;
 import com.thelastcodebenders.social_commerce_be.repositories.specifications.PostSpecification;
@@ -37,6 +39,7 @@ public class PostService {
     private final ProductService productService;
     private final ObjectMapper objectMapper;
     private final UserService userService;
+    private final CommentService commentService;
 
     @Transactional
     public PostResponse createPost(PostRequest request) throws JsonProcessingException {
@@ -47,7 +50,7 @@ public class PostService {
         }
 
         // upload file
-        String fileUrl = fileServiceAdapter.buildFileUri(fileServiceAdapter.uploadFile(request.getContent()));
+        String fileUrl = fileServiceAdapter.buildPinataFIleUri(fileServiceAdapter.uploadFileToPinata(request.getContent()));
 
         // save post
         Post post = Post.builder()
@@ -124,6 +127,24 @@ public class PostService {
         savePost(post);
         return AppResponse.builder()
                 .message(message + " Post")
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    public AppResponse addCommentToPost(Long postId, CommentRequest request) {
+        Comment comment = Comment.builder()
+                .comment(request.getComment())
+                .userId(UserUtil.getLoggedInUser().getUserId())
+                .build();
+
+        Post post = getPostById(postId);
+        post.getComments().add(comment);
+
+        commentService.saveComment(comment);
+        savePost(post);
+
+        return AppResponse.builder()
+                .message("Post comment saved successfully")
                 .status(HttpStatus.OK)
                 .build();
     }

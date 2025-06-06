@@ -3,6 +3,7 @@ package com.thelastcodebenders.social_commerce_be.models.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.ProductResponse;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -12,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,6 +56,10 @@ public class Post {
     @Column(name = "liker_id")
     @Builder.Default private List<UUID> likeIds = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "post_id") // This creates a post_id foreign key in the comment table
+    private List<Comment> comments = new ArrayList<>();
+
     public PostResponse toDto(User user, List<ProductResponse> products, User postUser) {
         return PostResponse.builder()
                 .postId(postId)
@@ -68,6 +74,7 @@ public class Post {
                 .liked(
                         likeIds.contains(user.getUserId())
                 )
+                .comments(comments)
                 .build();
     }
 }

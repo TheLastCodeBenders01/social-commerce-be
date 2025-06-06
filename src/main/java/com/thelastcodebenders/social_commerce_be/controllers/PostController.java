@@ -2,6 +2,7 @@ package com.thelastcodebenders.social_commerce_be.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
+import com.thelastcodebenders.social_commerce_be.models.dto.CommentRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostResponse;
 import com.thelastcodebenders.social_commerce_be.services.PostService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,5 +50,11 @@ public class PostController {
     @PutMapping("like/{postId}")
     public AppResponse likePost(@PathVariable Long postId) {
         return postService.likePost(postId);
+    }
+
+    @Operation(summary = "comment post")
+    @PostMapping("comment/{postId}")
+    public AppResponse commentPost(@PathVariable Long postId, @RequestBody CommentRequest request) {
+        return postService.addCommentToPost(postId, request);
     }
 }

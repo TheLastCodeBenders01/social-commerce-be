@@ -1,5 +1,6 @@
 package com.thelastcodebenders.social_commerce_be.models.dto;
 
+import com.thelastcodebenders.social_commerce_be.models.entities.Comment;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,4 +21,5 @@ public class PostResponse {
     private Instant createdAt;
     private Instant updatedAt;
     private boolean liked;
+    private List<Comment> comments;
 }
