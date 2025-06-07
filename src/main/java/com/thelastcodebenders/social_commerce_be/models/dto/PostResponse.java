@@ -22,4 +22,5 @@ public class PostResponse {
     private Instant updatedAt;
     private boolean liked;
     private List<Comment> comments;
+    private String profileImageUrl;
 }
