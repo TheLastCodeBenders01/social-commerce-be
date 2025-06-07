@@ -74,7 +74,7 @@ public class Post {
                 .liked(
                         likeIds.contains(user.getUserId())
                 )
-                .profileImageUrl(user.getProfileImageUrl())
+                .profileImageUrl(postUser.getProfileImageUrl())
                 .comments(comments)
                 .build();
     }
