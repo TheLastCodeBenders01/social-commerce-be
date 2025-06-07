@@ -8,11 +8,13 @@ import com.thelastcodebenders.social_commerce_be.models.entities.Product;
 import com.thelastcodebenders.social_commerce_be.repositories.ProductRepository;
 import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ProductService {
@@ -36,6 +38,7 @@ public class ProductService {
 //    }
 
     public ProductResponse saveProduct(ProductRequest productRequest) {
+        log.info("Received product request: {}", productRequest);
         String productImageUrl = fileServiceAdapter.buildPinataFIleUri(fileServiceAdapter.uploadFileToPinata(productRequest.getImage()));
 
         UUID userId = UserUtil.getLoggedInUser().getUserId();
