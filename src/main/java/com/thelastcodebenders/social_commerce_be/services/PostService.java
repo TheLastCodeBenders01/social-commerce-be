@@ -136,6 +136,7 @@ public class PostService {
         Comment comment = Comment.builder()
                 .comment(request.getComment())
                 .userId(user.getUserId())
+                .profileImageUrl(user.getProfileImageUrl())
                 .username(String.format("%s %s", user.getFirstName(), user.getLastName()))
                 .build();
 

@@ -20,6 +20,7 @@ public class UserResponse {
     private Address address;
     private List<UUID> followerIds;
     private List<UUID> followingIds;
+    private String profileImageUrl;
 
     @Data
     @Builder

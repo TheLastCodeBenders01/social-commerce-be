@@ -29,6 +29,7 @@ public class AuthenticationService {
                 .lastName(userRequest.getLastName())
                 .email(userRequest.getEmail())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
+                .profileImageUrl(userRequest.getProfileImageUrl())
                 .build();
 
         userRepository.save(user);

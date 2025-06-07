@@ -40,11 +40,15 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String email = oAuth2User.getAttribute("email");
         String firstName = oAuth2User.getAttribute("given_name").toString().substring(0, 1).toUpperCase() + oAuth2User.getAttribute("given_name").toString().substring(1);
         String lastName = oAuth2User.getAttribute("family_name").toString().substring(0, 1).toUpperCase() + oAuth2User.getAttribute("family_name").toString().substring(1);
+        String profileImageUrl = oAuth2User.getAttribute("picture");
+
+        log.info("Google Profile Image URL: {}", profileImageUrl);
 
         UserRequest userRequest = UserRequest.builder()
                 .firstName(firstName)
                 .lastName(lastName)
                 .email(email)
+                .profileImageUrl(profileImageUrl)
                 .password(UUID.randomUUID().toString())
                 .build();
 

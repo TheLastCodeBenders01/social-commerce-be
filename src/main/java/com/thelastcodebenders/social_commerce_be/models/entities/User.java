@@ -39,6 +39,7 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
+    private String profileImageUrl;
     @Builder.Default private boolean activated = false;
 
     private String phoneNumber;
@@ -85,6 +86,7 @@ public class User implements UserDetails {
                 .phoneNumber(phoneNumber)
                 .followerIds(followerIds)
                 .followingIds(followingIds)
+                .profileImageUrl(profileImageUrl)
                 .address(UserResponse.Address.builder()
                         .streetAddress(streetAddress)
                         .state(state)

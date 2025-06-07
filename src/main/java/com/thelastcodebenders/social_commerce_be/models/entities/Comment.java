@@ -27,6 +27,7 @@ public class Comment {
     private Long commentId;
 
     private String username;
+    private String profileImageUrl;
 
     private String comment;
 
