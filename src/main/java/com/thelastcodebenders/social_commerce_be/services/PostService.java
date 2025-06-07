@@ -132,9 +132,11 @@ public class PostService {
     }
 
     public AppResponse addCommentToPost(Long postId, CommentRequest request) {
+        User user = UserUtil.getLoggedInUser();
         Comment comment = Comment.builder()
                 .comment(request.getComment())
-                .userId(UserUtil.getLoggedInUser().getUserId())
+                .userId(user.getUserId())
+                .username(String.format("%s %s", user.getFirstName(), user.getLastName()))
                 .build();
 
         Post post = getPostById(postId);

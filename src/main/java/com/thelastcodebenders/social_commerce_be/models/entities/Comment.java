@@ -26,6 +26,8 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
+    private String username;
+
     private String comment;
 
     private UUID userId;
