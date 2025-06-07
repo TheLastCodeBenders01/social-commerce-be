@@ -5,6 +5,7 @@ import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.CommentRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostResponse;
+import com.thelastcodebenders.social_commerce_be.models.entities.Comment;
 import com.thelastcodebenders.social_commerce_be.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class PostController {
 
     @Operation(summary = "comment post")
     @PostMapping("comment/{postId}")
-    public AppResponse commentPost(@PathVariable Long postId, @RequestBody CommentRequest request) {
+    public Comment commentPost(@PathVariable Long postId, @RequestBody CommentRequest request) {
         return postService.addCommentToPost(postId, request);
     }
 }

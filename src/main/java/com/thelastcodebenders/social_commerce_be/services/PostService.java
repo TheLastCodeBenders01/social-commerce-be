@@ -131,7 +131,7 @@ public class PostService {
                 .build();
     }
 
-    public AppResponse addCommentToPost(Long postId, CommentRequest request) {
+    public Comment addCommentToPost(Long postId, CommentRequest request) {
         User user = UserUtil.getLoggedInUser();
         Comment comment = Comment.builder()
                 .comment(request.getComment())
@@ -146,10 +146,7 @@ public class PostService {
         commentService.saveComment(comment);
         savePost(post);
 
-        return AppResponse.builder()
-                .message("Post comment saved successfully")
-                .status(HttpStatus.OK)
-                .build();
+        return comment;
     }
 }
 
