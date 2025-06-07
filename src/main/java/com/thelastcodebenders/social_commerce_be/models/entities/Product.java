@@ -26,6 +26,8 @@ public class Product {
 
     private String name;
     private double amount;
+    private String imageUrl;
+
     private UUID userId;
 
     public ProductResponse toDto() {
@@ -34,6 +36,7 @@ public class Product {
                 .name(name)
                 .userId(userId)
                 .productId(productId)
+                .imageUrl(imageUrl)
                 .build();
     }
 }

@@ -12,4 +12,5 @@ public class ProductResponse {
     private double amount;
     private UUID userId;
     private long productId;
+    private String imageUrl;
 }

@@ -7,10 +7,8 @@ import com.thelastcodebenders.social_commerce_be.adapter.FileServiceAdapter;
 import com.thelastcodebenders.social_commerce_be.exceptions.PostNotFoundException;
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.CommentRequest;
-import com.thelastcodebenders.social_commerce_be.models.dto.IdResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.PostResponse;
-import com.thelastcodebenders.social_commerce_be.models.dto.ProductRequest;
 import com.thelastcodebenders.social_commerce_be.models.dto.ProductResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Post;
 import com.thelastcodebenders.social_commerce_be.models.entities.Comment;
@@ -75,18 +73,18 @@ public class PostService {
         return productService.findAllById(productIds);
     }
 
-    public IdResponse addPostProducts(List<ProductRequest> productRequests) {
-        Post post = Post.builder()
-                .userId(UserUtil.getLoggedInUser().getUserId())
-                .build();
-        post.setProductIds(productService.saveProducts(productRequests));
-        post = savePost(post);
-
-        return IdResponse.builder()
-                .message("Products successfully added")
-                .id(post.getPostId())
-                .build();
-    }
+//    public IdResponse addPostProducts(List<ProductRequest> productRequests) {
+//        Post post = Post.builder()
+//                .userId(UserUtil.getLoggedInUser().getUserId())
+//                .build();
+//        post.setProductIds(productService.saveProducts(productRequests));
+//        post = savePost(post);
+//
+//        return IdResponse.builder()
+//                .message("Products successfully added")
+//                .id(post.getPostId())
+//                .build();
+//    }
 
     private Post savePost(Post post) {
         return postRepository.save(post);
