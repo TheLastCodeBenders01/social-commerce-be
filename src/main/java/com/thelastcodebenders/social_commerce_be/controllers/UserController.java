@@ -38,4 +38,10 @@ public class UserController {
     public AppResponse followUser(@PathVariable UUID userId) {
         return userService.followUser(userId);
     }
+
+    @Operation(summary = "get user by id")
+    @GetMapping("{userId}")
+    public UserResponse getUserById(@PathVariable UUID userId) {
+        return userService.getUserById(userId);
+    }
 }

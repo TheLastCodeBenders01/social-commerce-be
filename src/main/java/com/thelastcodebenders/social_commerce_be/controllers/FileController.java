@@ -17,6 +17,6 @@ public class FileController {
 
     @PostMapping("upload")
     public String uploadFile(@ModelAttribute FileRequest request) {
-        return fileServiceAdapter.uploadFileToPinata(request.getFile());
+        return fileServiceAdapter.buildFileUri(fileServiceAdapter.uploadFileToPinata(request.getFile()));
     }
 }
