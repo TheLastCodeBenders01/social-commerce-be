@@ -9,6 +9,7 @@ import com.thelastcodebenders.social_commerce_be.models.entities.Comment;
 import com.thelastcodebenders.social_commerce_be.services.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RequestMapping("posts")
@@ -57,5 +59,13 @@ public class PostController {
     @PostMapping("comment/{postId}")
     public Comment commentPost(@PathVariable Long postId, @RequestBody CommentRequest request) {
         return postService.addCommentToPost(postId, request);
+    }
+
+    @Operation(summary = "get posts by user id")
+    @GetMapping("{userId}")
+    public List<PostResponse> getPostsByUserId(
+            @PathVariable UUID userId, @RequestParam("pageSize") int pageSize, @RequestParam("pageNumber") int pageNumber
+    ) {
+        return postService.getPostsByUserId(userId, pageSize, pageNumber);
     }
 }

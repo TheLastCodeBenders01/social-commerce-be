@@ -146,5 +146,10 @@ public class PostService {
 
         return comment;
     }
+
+    public List<PostResponse> getPostsByUserId(UUID userId, int pageSize, int pageNumber) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return convertPostListToPostListResponse(postRepository.findAllByUserId(userId, pageRequest).getContent());
+    }
 }
 
