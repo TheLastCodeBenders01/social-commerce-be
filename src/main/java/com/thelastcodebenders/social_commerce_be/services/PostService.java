@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -91,13 +92,14 @@ public class PostService {
     }
 
     public List<PostResponse> getAllPosts(int pageSize, int pageNumber) {
-        return convertPostListToPostListResponse(postRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent());
+        return convertPostListToPostListResponse(postRepository.findAllOrderByCreatedAtDesc(PageRequest.of(pageNumber, pageSize)).getContent());
     }
 
     public List<PostResponse> searchPosts(int pageSize, int pageNumber, String tag) {
         Specification<Post> specification = PostSpecification.search(tag);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         return convertPostListToPostListResponse(
-                postRepository.findAll(specification, PageRequest.of(pageNumber, pageSize)).getContent()
+                postRepository.findAll(specification, PageRequest.of(pageNumber, pageSize, sort)).getContent()
         );
     }
 
@@ -149,7 +151,7 @@ public class PostService {
 
     public List<PostResponse> getPostsByUserId(UUID userId, int pageSize, int pageNumber) {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
-        return convertPostListToPostListResponse(postRepository.findAllByUserId(userId, pageRequest).getContent());
+        return convertPostListToPostListResponse(postRepository.findAllByUserIdOrderByCreatedAtAsc(userId, pageRequest).getContent());
     }
 }
 
