@@ -1,5 +1,6 @@
 package com.thelastcodebenders.social_commerce_be.services;
 
+import com.thelastcodebenders.social_commerce_be.adapter.FileServiceAdapter;
 import com.thelastcodebenders.social_commerce_be.exceptions.UserNotFoundException;
 import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.UserProfileRequest;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FileServiceAdapter fileServiceAdapter;
 
     public User findByUserId(UUID userId) throws UserNotFoundException {
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -54,6 +56,10 @@ public class UserService {
         user.setStreetAddress(request.getStreetAddress());
         user.setState(request.getState());
         user.setCountry(request.getCountry());
+
+        if (request.getProfileImage() != null) {
+            user.setProfileImageUrl(fileServiceAdapter.buildPinataFIleUri(fileServiceAdapter.uploadFileToPinata(request.getProfileImage())));
+        }
 
         saveUser(user);
         return user.toDto();

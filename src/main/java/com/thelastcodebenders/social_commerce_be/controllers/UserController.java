@@ -7,6 +7,7 @@ import com.thelastcodebenders.social_commerce_be.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ public class UserController {
 
     @Operation(summary = "update user profile")
     @PutMapping("profile")
-    public UserResponse updateUserProfile(@RequestBody UserProfileRequest request) {
+    public UserResponse updateUserProfile(@ModelAttribute UserProfileRequest request) {
         return userService.updateUserProfile(request);
     }
 
