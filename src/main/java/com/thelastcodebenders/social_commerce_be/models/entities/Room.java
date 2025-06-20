@@ -30,7 +30,7 @@ public class Room {
     private UUID firstUser;
     private UUID secondUser;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "message_room_id", referencedColumnName = "roomId", nullable = false)
     private List<Message> messages = new ArrayList<>();
 

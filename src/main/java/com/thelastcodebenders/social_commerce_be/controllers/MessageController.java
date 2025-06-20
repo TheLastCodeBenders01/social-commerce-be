@@ -25,9 +25,9 @@ public class MessageController {
     private final MessageService messageService;
     private final RoomService roomService;
 
-    @PostMapping("room/{secondUser}")
-    public IdResponse createRoom(@PathVariable UUID secondUser) {
-        return roomService.createRoom(secondUser);
+    @PostMapping("room")
+    public Room getOrCreateRoom(@RequestParam(name = "secondUser") UUID secondUser) {
+        return roomService.getOrCreateRoom(secondUser);
     }
 
     @PostMapping("send/{roomId}")
@@ -40,7 +40,7 @@ public class MessageController {
         return roomService.getUserRooms();
     }
 
-    @GetMapping
+    @GetMapping("room")
     public List<Message> getRoomMessages(
             @RequestParam(name = "roomId") UUID roomId, @RequestParam(name = "pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize
     ) {

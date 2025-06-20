@@ -22,18 +22,18 @@ public class RoomService {
         return roomRepository.findAllByFirstUserOrSecondUser(userId, userId);
     }
 
-    public IdResponse createRoom(UUID secondUser) {
-        Room room = Room.builder()
-                .firstUser(UserUtil.getLoggedInUser().getUserId())
-                .secondUser(secondUser)
-                .messages(new ArrayList<>())
-                .build();
+    public Room getOrCreateRoom(UUID secondUser) {
+        UUID userId = UserUtil.getLoggedInUser().getUserId();
+        Room room = roomRepository.findByUsers(userId, secondUser).orElse(
+                Room.builder()
+                        .firstUser(UserUtil.getLoggedInUser().getUserId())
+                        .secondUser(secondUser)
+                        .messages(new ArrayList<>())
+                        .build()
+        );
         saveRoom(room);
 
-        return IdResponse.builder()
-                .message("Room successfully created")
-                .id(room.getRoomId().toString())
-                .build();
+        return room;
     }
 
     public void saveRoom(Room room) {
