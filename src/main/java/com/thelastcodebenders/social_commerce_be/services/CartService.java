@@ -1,12 +1,14 @@
 package com.thelastcodebenders.social_commerce_be.services;
 
 import com.thelastcodebenders.social_commerce_be.exceptions.CartNotFoundException;
+import com.thelastcodebenders.social_commerce_be.models.dto.AppResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.CartResponse;
 import com.thelastcodebenders.social_commerce_be.models.entities.Cart;
 import com.thelastcodebenders.social_commerce_be.repositories.CartRepository;
 import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -87,5 +89,16 @@ public class CartService {
         cart = saveCart(cart);
 
         return buildCartResponseFromCart(cart);
+    }
+
+    public AppResponse clearLoggedInUserCart() {
+        Cart cart = cartRepository.findByUserId(UserUtil.getLoggedInUser().getUserId()).get();
+        cart.setProductIds(new ArrayList<>());
+        saveCart(cart);
+
+        return AppResponse.builder()
+                .message("cart successfully cleared")
+                .status(HttpStatus.OK)
+                .build();
     }
 }

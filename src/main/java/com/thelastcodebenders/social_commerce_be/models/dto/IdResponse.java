@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class IdResponse {
-    private long id;
+    private String id;
     private String message;
 }
