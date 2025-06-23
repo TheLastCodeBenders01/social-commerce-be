@@ -29,6 +29,8 @@ public class Message {
     private String content;
 
     private UUID roomId;
+    private String sender;
+    private UUID senderId;
 
     @Column(nullable = false, updatable = false)
     @Builder.Default private Instant createdAt = Instant.now();

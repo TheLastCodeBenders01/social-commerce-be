@@ -1,10 +1,13 @@
 package com.thelastcodebenders.social_commerce_be.services;
 
+import com.thelastcodebenders.social_commerce_be.exceptions.UnauthorizedException;
 import com.thelastcodebenders.social_commerce_be.models.dto.ChatMessage;
 import com.thelastcodebenders.social_commerce_be.models.dto.MessageRequest;
 import com.thelastcodebenders.social_commerce_be.models.entities.Message;
 import com.thelastcodebenders.social_commerce_be.models.entities.Room;
+import com.thelastcodebenders.social_commerce_be.models.entities.User;
 import com.thelastcodebenders.social_commerce_be.repositories.MessageRepository;
+import com.thelastcodebenders.social_commerce_be.utils.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -25,11 +28,16 @@ public class MessageService {
 
     public Message sendMessage(UUID roomId, MessageRequest request) {
         Room room = roomService.getRoomById(roomId);
+        User user = UserUtil.getLoggedInUser();
+
+        throwErrorIfUserNotInRoom(room, user.getUserId());
 
         Message message = Message.builder()
                 .content(request.getContent())
                 .roomId(roomId)
                 .type(request.getMessageType())
+                .senderId(user.getUserId())
+                .sender(String.format("%s %s", user.getFirstName(), user.getLastName()))
                 .build();
 
         room.getMessages().add(message);
@@ -46,6 +54,13 @@ public class MessageService {
         roomService.saveRoom(room);
 
         return message;
+    }
+
+    private void throwErrorIfUserNotInRoom(Room room, UUID userId) {
+        if ((room.getFirstUser().equals(userId)) || room.getSecondUser().equals(userId)) {
+            return;
+        }
+        throw new UnauthorizedException("you're not a part of this room");
     }
 
     public void sendMessageToClients(Object payload, String destination) {

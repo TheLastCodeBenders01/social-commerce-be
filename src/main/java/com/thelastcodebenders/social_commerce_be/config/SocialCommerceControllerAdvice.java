@@ -32,9 +32,9 @@ public class SocialCommerceControllerAdvice {
         log.error(ex.getMessage());
         AppResponse message = AppResponse.builder()
                 .message(ex.getMessage())
-                .status(HttpStatus.UNAUTHORIZED).build();
+                .status(HttpStatus.FORBIDDEN).build();
 
-        return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(JwtException.class)

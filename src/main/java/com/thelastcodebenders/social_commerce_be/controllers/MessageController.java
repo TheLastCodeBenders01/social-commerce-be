@@ -1,6 +1,5 @@
 package com.thelastcodebenders.social_commerce_be.controllers;
 
-import com.thelastcodebenders.social_commerce_be.models.dto.IdResponse;
 import com.thelastcodebenders.social_commerce_be.models.dto.MessageRequest;
 import com.thelastcodebenders.social_commerce_be.models.entities.Message;
 import com.thelastcodebenders.social_commerce_be.models.entities.Room;
@@ -50,5 +49,10 @@ public class MessageController {
             @RequestParam(name = "roomId") UUID roomId, @RequestParam(name = "pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize
     ) {
         return messageService.getRoomMessages(roomId, pageNumber, pageSize);
+    }
+
+    @GetMapping("room/{roomId}")
+    public Room getRoomById(@PathVariable UUID roomId) {
+        return roomService.getRoomById(roomId);
     }
 }
